@@ -1,10 +1,10 @@
 import DashboardLayout from "@/app/layout/index";
-import SignupContent from "@/app/modules/signup";
-const Signup = () => {
+import SigninContent from "@/app/modules/signin";
+const Signin = () => {
   return (
     <DashboardLayout>
-      <SignupContent />
+      <SigninContent />
     </DashboardLayout>
   );
 };
-export default Signup;
+export default Signin;

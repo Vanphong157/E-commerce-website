@@ -13,7 +13,14 @@ const FooterState = () => {
             justifyContent: "center",
           }}
         >
-          <Col span={7}>
+          <Col
+            span={7}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
             <Row>
               <span
                 style={{

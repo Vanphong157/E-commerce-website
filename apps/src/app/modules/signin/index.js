@@ -5,11 +5,11 @@ import { Button, Col, Input, Row, Typography } from "antd";
 
 const { Title } = Typography;
 
-const SignupContent = () => {
+const SigninContent = () => {
   return (
     <Col span={12} offset={6}>
       <Row style={{ justifyContent: "center", marginTop: 10 }}>
-        <Title style={{ fontWeight: 700 }}>Sign up</Title>
+        <Title style={{ fontWeight: 700 }}>Sign in</Title>
       </Row>
       <Row style={{ marginTop: 10 }}>
         <Input
@@ -24,9 +24,9 @@ const SignupContent = () => {
         />
       </Row>
       <Row style={{ marginTop: 10 }}>
-        <span>Go to sign in?</span>
-        <a href="/pages/signin" style={{ color: "#ED3324", fontWeight: 700 }}>
-          Sign in
+        <span>Don't have an account?</span>
+        <a href="/pages/signup" style={{ color: "#ED3324", fontWeight: 700 }}>
+          Sign up
         </a>
       </Row>
       <Row style={{ marginTop: 10 }}>
@@ -47,4 +47,4 @@ const SignupContent = () => {
   );
 };
 
-export default SignupContent;
+export default SigninContent;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Avatar, Input, Row } from "antd";
+import { Col, Avatar, Input, Row, Badge } from "antd";
 import { SearchOutlined, FilterOutlined } from "@ant-design/icons";
 
 const accountDisplay = {
@@ -43,6 +43,7 @@ const HeaderState = () => {
         </Col>
         <Col span={6} style={accountDisplay}>
           <Col
+            span={12}
             style={{
               display: "flex",
               justifyContent: "center",
@@ -60,6 +61,30 @@ const HeaderState = () => {
             <Row>
               <span style={{ color: "#fff", fontWeight: "bold" }}>
                 Tài khoản
+              </span>
+            </Row>
+          </Col>
+          <Col
+            span={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Row>
+              <Badge count={100}>
+                <Avatar
+                  src={
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCgzi25vrxThkVJpvGmFFxOES9um9kjtFyag&s"
+                  }
+                />
+              </Badge>
+            </Row>
+            <Row>
+              <span style={{ color: "#fff", fontWeight: "bold" }}>
+                Thông báo
               </span>
             </Row>
           </Col>
