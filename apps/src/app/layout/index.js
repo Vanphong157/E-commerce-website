@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }) {
   return (
     <Layout>
       <Header />
-      <div style={{ margin: 10, backgroundColor: "#fff" }}>{children}</div>
+      <div style={{ margin: 10 }}>{children}</div>
       <FooterState />
     </Layout>
   );
