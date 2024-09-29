@@ -25,27 +25,28 @@ const Banner = () => {
       };
 
     return (
-        <Row style={{color:'red'}} gutter={10}>
+        <Row style={{color:'red', marginBottom:'20px'}} gutter={10}>
             <Col span={16}>
                 <Carousel arrows infinite={true} autoplay> 
                     <div>
-                        <h3 style={contentStyle}>1</h3>
+                        <img style={contentStyle} src='//cdnv2.tgdd.vn/mwg-static/dmx/Banner/19/5a/195aa5d53370c8b5fc05c8e43704a350.png'></img>
                     </div>
                     <div>
-                         <h3 style={contentStyle}>2</h3>
+                        <img style={contentStyle} src='//cdnv2.tgdd.vn/mwg-static/dmx/Banner/19/5a/195aa5d53370c8b5fc05c8e43704a350.png'></img>
                     </div>
-                     <div>
-                        <h3 style={contentStyle}>3</h3>
+                    <div>
+                        <img style={contentStyle} src='//cdnv2.tgdd.vn/mwg-static/dmx/Banner/19/5a/195aa5d53370c8b5fc05c8e43704a350.png'></img>
                     </div>
+                   
                  </Carousel>
             </Col>
             <Col span={8}>
                 <div>
                     <div style={{marginBottom:10}}>
-                        <h3 style={contentStyleBanner}>1</h3>
+                        <img  style={contentStyleBanner} src='//cdnv2.tgdd.vn/mwg-static/dmx/Banner/19/5a/195aa5d53370c8b5fc05c8e43704a350.png'></img>
                     </div>
                     <div>
-                        <h3 style={contentStyleBanner}>2</h3>
+                        <img  style={contentStyleBanner} src='//cdnv2.tgdd.vn/mwg-static/dmx/Banner/19/5a/195aa5d53370c8b5fc05c8e43704a350.png'></img>
                     </div>
                 </div>
             </Col> 
