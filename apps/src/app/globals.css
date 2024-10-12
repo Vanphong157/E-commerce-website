@@ -63,3 +63,8 @@ button.hoverable:hover {
 button.hoverable:nth-child(2):hover {
   background: #005bb5;
 }
+
+.active-button {
+  color: red;
+  background-color: red;
+}
