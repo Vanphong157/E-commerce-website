@@ -1,4 +1,4 @@
-import { Col, Collapse, Row, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import React from "react";
 import OrderItems from "./orderItems";
 

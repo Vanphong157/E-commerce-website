@@ -1,9 +1,9 @@
 "use client";
 
 import { Col, Row, Typography, Input, Button } from "antd";
-import React from "react";
+import React, { useState } from "react";
 
-const inforUser = [
+const initialInforUser = [
   {
     name: "Họ tên",
     value: "Nguyễn Văn A",
@@ -24,6 +24,20 @@ const inforUser = [
 ];
 
 const InformationComponent = () => {
+  const [inforUser, setInforUser] = useState(initialInforUser);
+  const [isChanged, setIsChanged] = useState(false);
+
+  const handleInputChange = (value, index) => {
+    const newInforUser = [...inforUser];
+    newInforUser[index].value = value;
+    setInforUser(newInforUser);
+
+    const isUserChanged = newInforUser.some(
+      (info, idx) => info.value !== initialInforUser[idx].value
+    );
+    setIsChanged(!isUserChanged);
+  };
+
   return (
     <>
       <Row>
@@ -74,13 +88,17 @@ const InformationComponent = () => {
                 <Typography>{infor.name}</Typography>
               </Col>
               <Col span={18}>
-                <Input value={infor.value} />
+                <Input
+                  value={infor.value}
+                  onChange={(e) => handleInputChange(e.target.value, index)} // Lắng nghe thay đổi input
+                />
               </Col>
             </Row>
           ))}
         </Row>
         <Row style={{ display: "flex", justifyContent: "flex-end", margin: 5 }}>
-          <Button>Lưu thông tin</Button>
+          <Button disabled={!isChanged}>Lưu thông tin</Button>{" "}
+          {/* Disable nếu không có thay đổi */}
         </Row>
       </Row>
     </>
