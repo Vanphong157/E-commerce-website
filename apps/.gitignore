@@ -6,6 +6,10 @@
 .pnp.js
 .yarn/install-state.gz
 
+# Backend (BE) Folder
+/BE/node_modules
+/BE/.env
+
 # testing
 /coverage
 
