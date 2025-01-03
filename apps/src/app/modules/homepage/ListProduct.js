@@ -1,5 +1,7 @@
+"use client"
+
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Product from './Product'; 
 import SaleProduct from './SaleProduct';
 
@@ -41,58 +43,54 @@ const styles = {
 };
 
 const ProductList = () => {
-  const saleProducts = [
-    {
-      imgUrl: 'https://cdn.tgdd.vn/Products/Images/1944/260042/electrolux-inverter-10-kg-ewf1024p5wb-181121-091018-600x600.jpg',
-      title: 'Tên sản phẩm dài nhu bla bla',
-      price: '9.790.000₫',
-      oldPrice: '15.990.000₫',
-      discount: '-38%',
-      slotsLeft: '19/20',
-    },
-    {
-        imgUrl: 'https://cdn.tgdd.vn/Products/Images/1944/260042/electrolux-inverter-10-kg-ewf1024p5wb-181121-091018-600x600.jpg',
-        title: 'Tên sản phẩm dài nhu bla bla',
-        price: '9.790.000₫',
-        oldPrice: '15.990.000₫',
-        discount: '-38%',
-        slotsLeft: '19/20',
-      },
-      {
-        imgUrl: 'https://cdn.tgdd.vn/Products/Images/1944/260042/electrolux-inverter-10-kg-ewf1024p5wb-181121-091018-600x600.jpg',
-        title: 'Tên sản phẩm dài nhu bla bla',
-        price: '9.790.000₫',
-        oldPrice: '15.990.000₫',
-        discount: '-38%',
-        slotsLeft: '19/20',
-      },
-      {
-        imgUrl: 'https://cdn.tgdd.vn/Products/Images/1944/260042/electrolux-inverter-10-kg-ewf1024p5wb-181121-091018-600x600.jpg',
-        title: 'Tên sản phẩm dài nhu bla bla',
-        price: '9.790.000₫',
-        oldPrice: '15.990.000₫',
-        discount: '-38%',
-        slotsLeft: '19/20',
-      },
-      {
-        imgUrl: 'https://cdn.tgdd.vn/Products/Images/1944/260042/electrolux-inverter-10-kg-ewf1024p5wb-181121-091018-600x600.jpg',
-        title: 'Tên sản phẩm dài nhu bla bla',
-        price: '9.790.000₫',
-        oldPrice: '15.990.000₫',
-        discount: '-38%',
-        slotsLeft: '19/20',
-      },
-      {
-        imgUrl: 'https://cdn.tgdd.vn/Products/Images/1944/260042/electrolux-inverter-10-kg-ewf1024p5wb-181121-091018-600x600.jpg',
-        title: 'Tên sản phẩm dài nhu bla bla',
-        price: '9.790.000₫',
-        oldPrice: '15.990.000₫',
-        discount: '-38%',
-        slotsLeft: '19/20',
-      },
-    // Add more products here as needed
-  ];
 
+  const [products, setProducts] = useState([]);
+  const [saleProducts, setSaleProducts] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const fetchSaleProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:3305/api/products/withdiscount');
+      const data = await response.json();
+      console.log(data.products ,'sdfads')
+      if (data.success) {
+        
+        setSaleProducts(data.products);
+      } else {
+        console.error('Error fetching products:', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:3305/api/products');
+      const data = await response.json();
+
+      if (data.success) {
+        setProducts(data.products);
+      } else {
+        console.error('Error fetching products:', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    fetchSaleProducts()
+    fetchProducts()
+  },[])
+  
+  
   return (
     <div style={styles.container}>
       <h3 style={styles.span}>Khuyến mãi Online</h3>
@@ -122,7 +120,7 @@ const ProductList = () => {
       </div>
          
       <Row style={{ background: 'white', padding: '20px' }} gutter={10}>
-        {saleProducts.map((product, index) => (
+        {products.map((product, index) => (
           <Col span={4} key={index}>
             <Product product={product} />
           </Col>

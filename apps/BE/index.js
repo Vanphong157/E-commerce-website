@@ -1,11 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
 const cors = require("cors");
 const dotenv = require("dotenv");
 const productRoutes = require("./routes/productRoute");
 const orderRoutes = require("./routes/orderRoute");
 const categoryRoutes = require("./routes/categoryRoute");
+const routes = require("./routes/index")
 
 dotenv.config();
 
@@ -26,4 +26,8 @@ mongoose
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
-  .catch((error) => console.log(error));
+  .catch((error) => console.log("Database connection error:", error));
+
+// API routes
+app.use('/api',routes)
+

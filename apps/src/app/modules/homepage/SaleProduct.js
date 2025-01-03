@@ -108,23 +108,23 @@ const styles = {
 };
 
 const SaleProduct = ({ product }) => {
-  const { imgUrl, title, price, oldPrice, discount, slotsLeft } = product;
+  const { finalPrice,image,name,price,discount } = product;
 
   return (
     <div style={styles.productBox}>
       <div style={styles.productImg}>
         <img
           style={{ maxHeight: '95%', objectFit: 'contain' }}
-          src={imgUrl}
-          alt={title}
+          src={image}
+          alt={name}
         />
       </div>
-      <h3 style={styles.productTitle}>{title}</h3>
+      <h3 style={styles.productTitle}>{name}</h3>
       <strong style={styles.productPrice}>
-        {price}
+        {finalPrice}
         <span style={{ display: 'flex', alignItems: 'center' }}>
-          <label style={styles.oldPrice}>{oldPrice}</label>
-          <small style={styles.discountBadge}>{discount}</small>
+          <label style={styles.oldPrice}>{price}</label>
+          <small style={styles.discountBadge}>{ discount.discountType == "fixed" ? ` - ${discount.value} đ` : `- ${discount.value} %` }</small>
         </span>
       </strong>
       <div style={styles.flashSale}>
@@ -135,7 +135,7 @@ const SaleProduct = ({ product }) => {
         />
         <span style={styles.flashSaleInfo}>
           <i style={styles.flashSaleGradient}></i>
-          <b style={styles.flashSaleText}>Còn {slotsLeft} suất</b>
+          <b style={styles.flashSaleText}>Còn {discount.appliedCount}/{discount.maxUsage} suất</b>
         </span>
       </div>
       <div style={styles.buyNowButton}>

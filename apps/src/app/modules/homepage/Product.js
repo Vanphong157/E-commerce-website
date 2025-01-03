@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const styles = {
@@ -107,25 +108,27 @@ const styles = {
 };
 
 const Product = ({ product }) => {
-  const { imgUrl, title, price, oldPrice, discount, slotsLeft } = product;
+  const { mainImage, name, price, variations, discount, _id } = product;
 
   return (
     <div style={styles.productBox}>
+      <Link href={`/pages/product/${_id}`}>
       <div style={styles.productImg}>
         <img
           style={{ maxHeight: '95%', objectFit: 'contain' }}
-          src={imgUrl}
-          alt={title}
+          src={mainImage}
+          alt={name}
         />
       </div>
-      <h3 style={styles.productTitle}>{title}</h3>
+      <h3 style={styles.productTitle}>{name}</h3>
       <strong style={styles.productPrice}>
-        {price}
+        {variations[0].price}
         <span style={{ display: 'flex', alignItems: 'center' }}>
-          <label style={styles.oldPrice}>{oldPrice}</label>
-          <small style={styles.discountBadge}>{discount}</small>
+          <label style={styles.oldPrice}>{variations[0].price} đ</label>
+          <small style={styles.discountBadge}> - 80%</small>
         </span>
       </strong>
+      </Link>
       <div style={styles.buyNowButton}>
         <a style={styles.buyNowLink} href="#">Mua ngay</a>
       </div>
