@@ -33,11 +33,13 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const data = await loginUser({ email, password });
-      console.log(data);
       setUser(data.user);
       setToken(data.token);
       localStorage.setItem("token", data.token);
-      router.push("/");
+      localStorage.setItem("role", data.user.role);
+      data.user.role === "admin"
+        ? router.push("/pages/admin")
+        : router.push("/");
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -58,9 +60,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       const data = await registerUser(userInfo);
       setUser(data.user);
-      setToken(data.token);
-      localStorage.setItem("token", data.token);
-      router.push("/");
+      router.push("/pages/signin");
     } catch (error) {
       console.error("Registration error:", error);
       throw error;

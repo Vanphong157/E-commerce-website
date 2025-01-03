@@ -16,12 +16,18 @@ import { useRouter } from "next/navigation";
 const { Content, Sider } = Layout;
 
 const AdminLayout = ({ children }) => {
+  const roleUser = localStorage.getItem("role");
+
   const router = useRouter();
 
   const handleLogout = () => {
     localStorage.clear();
     router.push("/");
   };
+
+  if (roleUser !== "admin") {
+    router.push("/");
+  }
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
