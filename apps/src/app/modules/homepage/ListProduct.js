@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import Product from './Product'; 
 import SaleProduct from './SaleProduct';
 
+const baseURL = 'https://api-doan-9c1f18bfacff.herokuapp.com';
+
 const styles = {
   span: {
     fontWeight: '700',
@@ -51,36 +53,35 @@ const ProductList = () => {
 
   const fetchSaleProducts = async () => {
     try {
-      const response = await fetch('http://localhost:3305/api/products/withdiscount');
+      const response = await fetch(`${baseURL}/product`);
       const data = await response.json();
-      console.log(data.products ,'sdfads')
-      if (data.success) {
-        
-        setSaleProducts(data.products);
+
+      if (response.ok) {
+        setSaleProducts(data.data);
       } else {
         console.error('Error fetching products:', data.message);
       }
     } catch (error) {
       console.error('Error:', error);
-    } finally {
+    } finally { 
       setLoading(false);
     }
   };
 
 
-  const fetchProducts = async () => {
+  const fetchProducts = async () => { 
     try {
-      const response = await fetch('http://localhost:3305/api/products');
+      const response = await fetch(`${baseURL}/product`);
       const data = await response.json();
 
-      if (data.success) {
-        setProducts(data.products);
+      if (response.ok) {
+        setProducts(data.data);
       } else {
         console.error('Error fetching products:', data.message);
       }
     } catch (error) {
       console.error('Error:', error);
-    } finally {
+    } finally { 
       setLoading(false);
     }
   };

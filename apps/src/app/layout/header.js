@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Avatar, Input, Row, Badge } from "antd";
 import { SearchOutlined, FilterOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 const accountDisplay = {
   display: "flex",
@@ -14,12 +15,14 @@ const HeaderState = () => {
       <Row style={{ backgroundColor: "#fe0000", padding: 10 }}>
         <Col span={6} style={{ maxHeight: 100 }}>
           <Col span={8} offset={8}>
+            <Link href={'/'}>
             <Avatar
               size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
               src={
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCgzi25vrxThkVJpvGmFFxOES9um9kjtFyag&s"
+                "https://intphcm.com/data/upload/logo-dep-shell.jpg"
               }
             />
+            </Link>
           </Col>
         </Col>
         <Col
@@ -54,14 +57,16 @@ const HeaderState = () => {
             <Row>
               <Avatar
                 src={
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCgzi25vrxThkVJpvGmFFxOES9um9kjtFyag&s"
+                  "https://png.pngtree.com/element_our/20190531/ourmid/pngtree-shopping-cart-convenient-icon-image_1287807.jpg"
                 }
               />
             </Row>
             <Row>
+              <Link href={`/pages/cart`}>
               <span style={{ color: "#fff", fontWeight: "bold" }}>
-                Tài khoản
+                Giỏ hàng
               </span>
+              </Link>
             </Row>
           </Col>
           <Col
@@ -77,15 +82,17 @@ const HeaderState = () => {
               <Badge count={100}>
                 <Avatar
                   src={
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCgzi25vrxThkVJpvGmFFxOES9um9kjtFyag&s"
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfwfzTPVw45cJcHNUp3sWUWLOkYAfQlAEBOQ&s"
                   }
                 />
               </Badge>
             </Row>
             <Row>
+              <Link href={`/pages/personal`}>
               <span style={{ color: "#fff", fontWeight: "bold" }}>
-                Thông báo
+                Tài khoản
               </span>
+              </Link>
             </Row>
           </Col>
         </Col>
