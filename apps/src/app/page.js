@@ -1,10 +1,11 @@
-import DashboardLayout from "@/app/layout/index";
+import DashboardLayout from "../app/layout/index";
+
 import HomepageComponent from "./modules/homepage";
 
 const Homepage = () => {
   return (
     <DashboardLayout>
-      <HomepageComponent/>
+      <HomepageComponent />
     </DashboardLayout>
   );
 };

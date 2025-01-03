@@ -1,5 +1,5 @@
-import DashboardLayout from "@/app/layout/index";
-import CartComponent from "@/app/modules/cart";
+import DashboardLayout from "../../layout/index";
+import CartComponent from "../../modules/cart";
 
 export default function Cart() {
   return (
