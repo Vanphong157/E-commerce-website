@@ -1,3 +1,4 @@
+import formatCurrency from '@/app/utils/formatCurrency';
 import Link from 'next/link';
 import React from 'react';
 
@@ -19,6 +20,7 @@ const styles = {
   },
   productTitle: {
     lineHeight: '19px',
+    height: '38px',
     textAlign: 'left',
     color: '#1d2939',
     marginBottom: '8px',
@@ -108,7 +110,7 @@ const styles = {
 };
 
 const Product = ({ product }) => {
-  const { mainImage, name, price, variations, discount, _id } = product;
+  const { images, name, price, _id } = product;
 
   return (
     <div style={styles.productBox}>
@@ -116,17 +118,17 @@ const Product = ({ product }) => {
       <div style={styles.productImg}>
         <img
           style={{ maxHeight: '95%', objectFit: 'contain' }}
-          src={mainImage}
+          src={images[0]}
           alt={name}
         />
       </div>
       <h3 style={styles.productTitle}>{name}</h3>
       <strong style={styles.productPrice}>
-        {variations[0].price}
-        <span style={{ display: 'flex', alignItems: 'center' }}>
+        {formatCurrency(price)} 
+        {/* <span style={{ display: 'flex', alignItems: 'center' }}>
           <label style={styles.oldPrice}>{variations[0].price} đ</label>
           <small style={styles.discountBadge}> - 80%</small>
-        </span>
+        </span> */}
       </strong>
       </Link>
       <div style={styles.buyNowButton}>

@@ -178,7 +178,7 @@ const FooterState = () => {
                 marginBottom: 2,
               }}
             >
-              Sách UIT - Hệ thống website bán sách
+              UIT - Hệ thống website
             </span>
             <Row display={"flex"}>
               <Col
@@ -266,7 +266,7 @@ const FooterState = () => {
           }}
         >
           <span style={{ color: "#ffffff" }}>
-            Copyright © 2024 | Bản quyền thuộc về Sách UIT
+            Copyright © 2024 | Bản quyền thuộc UIT
           </span>
         </Row>
       </Row>

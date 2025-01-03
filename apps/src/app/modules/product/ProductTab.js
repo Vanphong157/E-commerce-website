@@ -1,84 +1,117 @@
-import { Row, Tabs,Collapse,theme } from 'antd';
+"use client";
+import { Row, Tabs, Collapse, theme } from 'antd';
 import React from 'react';
+import styled from 'styled-components';
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found:a welcome guest in many households across the world.
+const { Panel } = Collapse;
+const { TabPane } = Tabs;
+
+// Styled Components
+const StyledRow = styled(Row)`
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background: white;
+  color: black;
+  padding-bottom: 20px;
 `;
 
-const getItems = (panelStyle) => [
-    {
-      key: '1',
-      label: 'Màn hình',
-      children: <p>{text}</p>,
-      style: panelStyle,
-    },
-    {
-      key: '2',
-      label: 'Camera trước',
-      children: <p>{text}</p>,
-      style: panelStyle,
-    },
-    {
-      key: '3',
-      label: 'Bộ nhớ & Lưu trữ',
-      children: <p>{text}</p>,
-      style: panelStyle,
-    },
-  ];
+// Component để hiển thị thông số kỹ thuật
+const TechnicalSpecifications = ({ specifications }) => {
+  const { token } = theme.useToken();
 
-const TabSpec = () => {
-    const { token } = theme.useToken();
-  const panelStyle = {
-    marginBottom: 12,
-    background: "#f2f4f7",
-    borderRadius: token.borderRadiusLG,
-    border: 'none',
-  };
   return (
-    <Collapse 
-        style={{
-            background: token.colorBgContainer,
-        }}
-        bordered={false}
-        items={getItems(panelStyle)}
-        defaultActiveKey={['1']} 
-        onChange={onChange} />
+    <Collapse
+      bordered={false}
+      defaultActiveKey={['1']}
+      style={{
+        background: token.colorBgContainer,
+      }}
+    >
+      {specifications.map((spec) => (
+        <Panel
+          header={spec.specName}
+          key={spec._id}
+          style={{
+            marginBottom: 12,
+            background: "#f2f4f7",
+            borderRadius: token.borderRadiusLG,
+            border: 'none',
+          }}
+        >
+          <p>{spec.specValue}</p>
+        </Panel>
+      ))}
+    </Collapse>
   );
 };
 
-const onChange = (key) => {
-  console.log(key);
+// Component để hiển thị đánh giá
+const ProductReviews = ({ reviews, rating }) => {
+  const { token } = theme.useToken();
+
+  return (
+    <div style={{ padding: "20px", background: "#fff", borderRadius: "8px" }}>
+      <h3>Đánh giá ({rating})</h3>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <span>
+          {Array.from({ length: 5 }, (_, index) => (
+            <span key={index}>
+              {index < Math.floor(rating) ? '★' : '☆'}
+            </span>
+          ))}
+        </span>
+        <span style={{ marginLeft: "8px" }}>({rating})</span>
+      </div>
+      <Collapse
+        bordered={false}
+        defaultActiveKey={[]}
+        style={{
+          marginTop: 12,
+          background: token.colorBgContainer,
+        }}
+      >
+        {reviews.map((review) => (
+          <Panel
+            header={`${review.user} - ${review.rating}★`}
+            key={review._id}
+            style={{
+              marginBottom: 12,
+              background: "#f2f4f7",
+              borderRadius: token.borderRadiusLG,
+              border: 'none',
+            }}
+          >
+            <p>{review.comment}</p>
+            <p style={{ fontStyle: "italic", color: "#555" }}>
+              Ngày: {new Date(review.createdAt).toLocaleDateString()}
+            </p>
+          </Panel>
+        ))}
+      </Collapse>
+    </div>
+  );
 };
 
-const ProductTab = () => {
+// Component `ProductTab`
+const ProductTab = ({ technicalSpecifications, reviews, rating }) => {
   const items = [
     {
       key: '1',
-      label: 'Thông số kĩ thuật',
-      children: <TabSpec />,
+      label: 'Thông số kỹ thuật',
+      children: <TechnicalSpecifications specifications={technicalSpecifications} />,
     },
     {
       key: '2',
-      label: 'Bài viết đánh giá',
-      children: 'Content of Tab Pane 2',
+      label: 'Đánh giá sản phẩm',
+      children: <ProductReviews reviews={reviews} rating={rating} />,
     },
   ];
 
   return (
-    <Row
-      style={{
-        padding:"15px",
-        marginTop: '10px',
-        borderRadius: '8px',
-        background: 'white',
-        color: 'black',
-        paddingBottom: '20px',
-      }}
-    >
-      <Tabs style={{width:"100%"}} defaultActiveKey="1" items={items} onChange={onChange} />
-    </Row>
+    <StyledRow>
+      <Tabs defaultActiveKey="1" items={items} style={{ width: "100%" }} />
+    </StyledRow>
   );
 };
 
