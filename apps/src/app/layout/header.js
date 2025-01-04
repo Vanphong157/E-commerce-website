@@ -62,6 +62,8 @@ const HeaderState = () => {
           span={12}
           style={{
             position: "relative",
+            display: "flex",
+            alignItems: "center",
           }}
         >
           <Input
@@ -80,7 +82,7 @@ const HeaderState = () => {
             <div
               style={{
                 position: "absolute",
-                top: "100%",
+                top: "80%",
                 left: 0,
                 width: "100%",
                 backgroundColor: "#fff",
