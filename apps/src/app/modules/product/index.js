@@ -227,7 +227,7 @@ const ProductPage = () => {
           <ProductTab technicalSpecifications={technicalSpecifications} />
 
           {/* Đánh giá sản phẩm */}
-          <Review reviews={currentReviews} rating={product.rating} />
+          <Review reviews={reviews} productName={product.name} rating={product.rating} productId={product._id} />
 
           {/* Fake Pagination for Reviews */}
           {totalReviews > reviewsPerPage && (
