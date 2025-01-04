@@ -72,7 +72,6 @@ const SignupContent = () => {
 
   const handleRegister = async () => {
     const { name, email, password } = formData;
-    console.log(name, email, password);
 
     if (!name || !password || !email) {
       message.error("Vui lòng điền đầy đủ thông tin!");

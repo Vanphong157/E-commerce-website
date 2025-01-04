@@ -14,6 +14,7 @@ const HeaderState = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
+  const isAuthed = localStorage.getItem("token");
 
   const handleSearch = async (value) => {
     if (!value.trim()) {
@@ -177,11 +178,19 @@ const HeaderState = () => {
               </Badge>
             </Row>
             <Row>
-              <Link href={`/pages/personal`}>
-                <span style={{ color: "#fff", fontWeight: "bold" }}>
-                  Tài khoản
-                </span>
-              </Link>
+              {isAuthed ? (
+                <Link href={`/pages/personal`}>
+                  <span style={{ color: "#fff", fontWeight: "bold" }}>
+                    Tài khoản
+                  </span>
+                </Link>
+              ) : (
+                <Link href={`/pages/signin`}>
+                  <span style={{ color: "#fff", fontWeight: "bold" }}>
+                    Đăng nhập
+                  </span>
+                </Link>
+              )}
             </Row>
           </Col>
         </Col>
