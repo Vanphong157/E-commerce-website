@@ -134,7 +134,7 @@ const SaleProduct = ({ product }) => {
 
   return (
     <div style={styles.productBox}>
-      <Link href={`/product/${_id}`} passHref>
+      <Link href={`/pages/product/${_id}`} passHref>
         
           <div style={styles.productImg}>
             {imageLoading && (

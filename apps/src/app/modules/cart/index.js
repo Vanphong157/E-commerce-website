@@ -2,12 +2,14 @@
 import { Button, Col, Input, Row, message, Divider } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DeleteFilled, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
 
 const CartComponent = () => {
   const [cart, setCart] = useState(null);
   const [discountCode, setDiscountCode] = useState('');
   const [discountValue, setDiscountValue] = useState(0); // Start with 0
-
+  const router = useRouter(); 
+  
   const fetchUserCart = async () => { 
     try {
       const response = await fetch("https://api-doan-9c1f18bfacff.herokuapp.com/cart", {
@@ -24,7 +26,7 @@ const CartComponent = () => {
 
       const data = await response.json();
       console.log(data);  
-      setCart(data.cart);
+      setCart(data.cart || { items: [] }); // Set to empty object if data.cart is null or undefined
     } catch (error) {
       console.error(error);
       message.error("Lỗi khi tải giỏ hàng");
@@ -453,8 +455,7 @@ const CartComponent = () => {
             className="custom-checkout-button"
             aria-label="Thanh toán"
             onClick={() => {
-              // Handle checkout logic here
-              message.info("Chức năng thanh toán chưa được triển khai.");
+              router.push("/pages/checkout");
             }}
           >
             Thanh toán
@@ -466,4 +467,3 @@ const CartComponent = () => {
 };
 
 export default CartComponent;
- 
