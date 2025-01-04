@@ -36,8 +36,10 @@ const SigninContent = () => {
   const [hover, setHover] = useState(false);
   const router = useRouter();
   const isAuthed = localStorage.getItem("token");
+  const getRole = localStorage.getItem("role");
+
   if (isAuthed) {
-    router.push("/");
+    getRole === "admin" ? router.push("/pages/admin") : router.push("/");
   }
 
   // Hàm xử lý thay đổi input
