@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Breadcrumb, Button, Col, Row, Typography, Spin, Alert } from "antd";
+import { Breadcrumb, Button, Col, Row, Typography, Spin, Alert, message } from "antd";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import ProductImages from "./ProductImages";
 import ProductInfo from "./ProductInfo";
@@ -9,6 +9,7 @@ import ProductRelated from "./ProductRelated";
 import ProductTab from "./ProductTab";
 import Review from "./Review";
 import { useParams } from "next/navigation";
+import {addItemToCart} from "@/app/actions/cart";
 
 const { Title } = Typography;
 
@@ -119,8 +120,14 @@ const ProductPage = () => {
     );
   }
 
-  const handleAddToCart = () => {
-    alert("Thêm vào giỏ hàng thành công!");
+  const handleAddToCart = async (productId) => {
+    try { 
+      await addItemToCart(productId);
+      message.success("Đã thêm sản phẩm vào giỏ hàng");
+    } catch (error) {
+      console.error("Add to cart error:", error);
+      throw error;  
+    }
   } 
 
   return (

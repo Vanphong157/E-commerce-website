@@ -14,20 +14,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-      fetchUser(storedToken)
-        .then((userData) => setUser(userData))
-        .catch((error) => {
-          console.error("Error fetching user:", error);
-          logout();
-        })
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUser(token)
+        .then((data) => setUser(data))
+        .catch((error) => console.error("Fetch user error:", error))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, []);
+  } , []);
 
   const login = async ({ email, password }) => {
     try {
