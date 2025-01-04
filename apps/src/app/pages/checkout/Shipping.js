@@ -3,23 +3,50 @@ import { Button, Col, Input, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import Swal from 'sweetalert2'
-// Reusable style for all text inputs
+import Swal from 'sweetalert2';
+
 const inputStyle = {
   width: "98%",
   margin: "1rem 0 0 0",
 };
 
-const Shipping = ({items}) => {
-  const router = useRouter(); 
+// Styles for shipping selection buttons
+const shippingBaseBtnStyle = {
+  maxWidth: "49%",
+  flex: 1,
+  height: "3.5rem",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginRight: "0.5rem",
+};
+
+// Styles for payment method buttons
+const paymentBaseBtnStyle = {
+  maxWidth: "48%",
+  flex: 1,
+  height: "3.5rem",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const selectedStyle = {
+  border: "2px solid #1890ff",
+  boxShadow: "0 0 5px #1890ff",
+};
+
+const Shipping = ({ items }) => {
+  const router = useRouter();
+
   // 1. Local states for each field
-  const [district, setDistrict] = useState("");     // Quận / huyện
-  const [street, setStreet] = useState("");         // Số nhà / tên đường
-  const [phone, setPhone] = useState("");           // Số điện thoại
-  const [city, setCity] = useState("");             // Tỉnh / thành phố
-  const [message, setMessage] = useState("");       // Lời nhắn
+  const [district, setDistrict] = useState("");       // Quận / huyện
+  const [street, setStreet] = useState("");           // Số nhà / tên đường
+  const [phone, setPhone] = useState("");             // Số điện thoại
+  const [city, setCity] = useState("");               // Tỉnh / thành phố
+  const [message, setMessage] = useState("");         // Lời nhắn
   const [isShipAtHome, setIsShipAtHome] = useState(true); // true = giao tại nhà, false = nhận tại trung tâm
-  const [paymentMethod, setPaymentMethod] = useState(""); // e.g. "qr" or "cod"
+  const [paymentMethod, setPaymentMethod] = useState(""); // "qr" hoặc "cod"
 
   // 2. Toggle shipping method
   const handleShippingSelection = (isAtHome) => {
@@ -31,27 +58,32 @@ const Shipping = ({items}) => {
     setPaymentMethod(method);
   };
 
-  // 4. Handle form submission or next step
+  // 4. Submit logic
   const handleSubmit = async () => {
-    console.log("asdfsdf")
     // 1. Prepare data in the desired format
     const requestBody = {
       items: items.map((item) => ({
-        productId: item.productId,  // or whatever keys your items have
+        productId: item.productId,
         quantity: item.quantity,
       })),
-      phoneNumber: phone,              // shippingData.phone, or just 'phone'
+      phoneNumber: phone,
       shippingAddress: {
-        province: city,               // shippingData.city
-        ward: district,               // shippingData.district
-        addressDetail: street,        // shippingData.street
+        province: city,
+        ward: district,
+        addressDetail: street,
       },
-      paymentMethod: paymentMethod,    // e.g. 'cod' or 'qr'
+      paymentMethod: paymentMethod, 
     };
-  
-    if(paymentMethod == "cod"){
+
+    // Validate minimal fields (phone, city, paymentMethod)
+    if (!phone || !city || !paymentMethod) {
+      Swal.fire("Vui lòng điền đủ thông tin và chọn phương thức thanh toán!");
+      return;
+    }
+
+    // Payment logic
+    if (paymentMethod === "cod") {
       try {
-        // 2. Make the POST request
         const response = await fetch("https://api-doan-9c1f18bfacff.herokuapp.com/orders/create", {
           method: "POST",
           headers: {
@@ -61,7 +93,6 @@ const Shipping = ({items}) => {
           body: JSON.stringify(requestBody),
         });
     
-        // 3. Handle response
         const data = await response.json();
     
         console.log("Request Body:", requestBody);
@@ -69,42 +100,30 @@ const Shipping = ({items}) => {
         console.log("Data:", data);
     
         if (!response.ok) {
-          // If the response status is not OK, you can handle the error here
           throw new Error(data.message || "Đã xảy ra lỗi khi tạo đơn hàng");
         }
-  
 
         router.push("/");
         Swal.fire({
           title: 'Success!',
           text: 'Đặt hàng thành công',
           icon: 'success',
-          confirmButtonText: 'Cool'
-        })
-
+          confirmButtonText: 'OK',
+        });
       } catch (error) {
         console.error(error);
-        // Optional: show a user-friendly message
+        Swal.fire("Error", error.message, "error");
       }
     }
 
-    if(paymentMethod == "qr"){
-      console.log("asdfsdf")
+    if (paymentMethod === "qr") {
+      // If "qr", we send "paymentMethod: online"
       const requestBodyy = {
-        items: items.map((item) => ({
-          productId: item.productId,  // or whatever keys your items have
-          quantity: item.quantity,
-        })),
-        phoneNumber: phone,              // shippingData.phone, or just 'phone'
-        shippingAddress: {
-          province: city,               // shippingData.city
-          ward: district,               // shippingData.district
-          addressDetail: street,        // shippingData.street
-        },
-        paymentMethod: "online",    // e.g. 'cod' or 'qr'
+        ...requestBody,
+        paymentMethod: "online", 
       };
+
       try {
-        // 2. Make the POST request
         const response = await fetch("https://api-doan-9c1f18bfacff.herokuapp.com/orders/create", {
           method: "POST",
           headers: {
@@ -114,55 +133,46 @@ const Shipping = ({items}) => {
           body: JSON.stringify(requestBodyy),
         });
 
-        console.log(response)
-
-        // 3. Handle response
         const data = await response.json();
 
-        const paymentLink = data.order.paymentUrl;
-    
-        console.log("Request Body:", requestBody);
+        console.log("Request Body:", requestBodyy);
         console.log("Response:", response);
         console.log("Data:", data);
-    
+
         if (!response.ok) {
-          // If the response status is not OK, you can handle the error here
           throw new Error(data.message || "Đã xảy ra lỗi khi tạo đơn hàng");
         }
-  
-        router.push(`${paymentLink}`);
-  
+
+        // For online payment, the server returns data.order.paymentUrl
+        const paymentLink = data.order.paymentUrl; 
+        router.push(paymentLink);
       } catch (error) {
         console.error(error);
-        // Optional: show a user-friendly message
+        Swal.fire("Error", error.message, "error");
       }
     }
   };
-  
 
   return (
     <div>
       {/* Buttons to select shipping method */}
-      <div style={{ width: "100%", display: "flex" }}>
+      <div style={{ width: "100%", display: "flex", marginBottom: "1rem" }}>
         {/* Giao hàng tại nhà */}
         <Button
           size="large"
           style={{
-            maxWidth: "49%",
-            flex: 1,
-            height: "3.5rem",
-            display: "flex",
-            alignItems: "center",
+            ...shippingBaseBtnStyle,
+            // If isShipAtHome is TRUE, highlight this button
+            ...(isShipAtHome ? selectedStyle : {}),
           }}
           onClick={() => handleShippingSelection(true)}
-          className="mr-2"
         >
           <img
             src="https://cdn.tgdd.vn/Products/Images/42/329150/iphone-16-pro-max-black-thumb-200x200.jpg"
             alt="Delivery at Home"
-            style={{ width: "2.5rem" }}
+            style={{ width: "2.5rem", marginRight: "0.5rem" }}
           />
-          <h3 className="text-xl font-semibold" style={{ marginLeft: "0.5rem" }}>
+          <h3 className="text-xl font-semibold">
             Nhận hàng tại nhà
           </h3>
         </Button>
@@ -171,20 +181,19 @@ const Shipping = ({items}) => {
         <Button
           size="large"
           style={{
-            maxWidth: "49%",
-            flex: 1,
-            height: "3.5rem",
-            display: "flex",
-            alignItems: "center",
+            ...shippingBaseBtnStyle,
+            marginRight: 0, 
+            // If isShipAtHome is FALSE, highlight this button
+            ...(!isShipAtHome ? selectedStyle : {}),
           }}
           onClick={() => handleShippingSelection(false)}
         >
           <img
             src="https://cdn.tgdd.vn/Products/Images/42/329150/iphone-16-pro-max-black-thumb.jpg"
             alt="Pick Up at Center"
-            style={{ width: "2.5rem" }}
+            style={{ width: "2.5rem", marginRight: "0.5rem" }}
           />
-          <h3 className="text-xl" style={{ marginLeft: "0.5rem" }}>
+          <h3 className="text-xl">
             Nhận hàng tại trung tâm
           </h3>
         </Button>
@@ -209,7 +218,6 @@ const Shipping = ({items}) => {
               onChange={(e) => setStreet(e.target.value)}
             />
           </Col>
-
           <Col span={12}>
             <Input
               placeholder="Số điện thoại"
@@ -243,29 +251,24 @@ const Shipping = ({items}) => {
               <Button
                 size="large"
                 style={{
-                  maxWidth: "48%",
-                  flex: 1,
-                  height: "3.5rem",
-                  display: "flex",
-                  alignItems: "center",
+                  ...paymentBaseBtnStyle,
                   marginRight: "1rem",
+                  // highlight if paymentMethod = "qr"
+                  ...(paymentMethod === "qr" ? selectedStyle : {}),
                 }}
                 onClick={() => handleSelectPaymentMethod("qr")}
               >
-                <h3 className="text-normal">Thanh toán bằng QR</h3>
+                Thanh toán bằng QR
               </Button>
               <Button
                 size="large"
                 style={{
-                  maxWidth: "48%",
-                  flex: 1,
-                  height: "3.5rem",
-                  display: "flex",
-                  alignItems: "center",
+                  ...paymentBaseBtnStyle,
+                  ...(paymentMethod === "cod" ? selectedStyle : {}),
                 }}
                 onClick={() => handleSelectPaymentMethod("cod")}
               >
-                <h3 className="text-normal">Thanh toán khi nhận hàng</h3>
+                Thanh toán khi nhận hàng
               </Button>
             </div>
 
@@ -298,29 +301,23 @@ const Shipping = ({items}) => {
               <Button
                 size="large"
                 style={{
-                  maxWidth: "48%",
-                  flex: 1,
-                  height: "3.5rem",
-                  display: "flex",
-                  alignItems: "center",
+                  ...paymentBaseBtnStyle,
                   marginRight: "1rem",
+                  ...(paymentMethod === "qr" ? selectedStyle : {}),
                 }}
                 onClick={() => handleSelectPaymentMethod("qr")}
               >
-                <h3 className="text-normal">Thanh toán bằng QR</h3>
+                Thanh toán bằng QR
               </Button>
               <Button
                 size="large"
                 style={{
-                  maxWidth: "48%",
-                  flex: 1,
-                  height: "3.5rem",
-                  display: "flex",
-                  alignItems: "center",
+                  ...paymentBaseBtnStyle,
+                  ...(paymentMethod === "cod" ? selectedStyle : {}),
                 }}
                 onClick={() => handleSelectPaymentMethod("cod")}
               >
-                <h3 className="text-normal">Thanh toán khi nhận hàng</h3>
+                Thanh toán khi nhận hàng
               </Button>
             </div>
 
