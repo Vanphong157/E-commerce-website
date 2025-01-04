@@ -1,15 +1,39 @@
 "use client";
 import React, { useState } from "react";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Button, Col, Input, Row, Typography, Avatar, Checkbox } from "antd";
+import {
+  Button,
+  Col,
+  Input,
+  Row,
+  Typography,
+  Avatar,
+  Checkbox,
+  message,
+} from "antd";
 const { Title } = Typography;
+import { useAuth } from "../../contexts/AuthContext";
 
 const inputFieldArray = [
   {
-    name: "username",
-    placeholder: "Tài khoản",
+    name: "name",
+    placeholder: "Họ tên",
     className: "form-field",
     prefix: <UserOutlined />,
+    type: "text",
+    rules: [
+      {
+        required: true,
+        message: "Trường này không được bỏ trống",
+      },
+    ],
+  },
+  {
+    name: "email",
+    placeholder: "Email",
+    className: "form-field",
+    prefix: <LockOutlined />,
+    type: "email",
     rules: [
       {
         required: true,
@@ -22,18 +46,7 @@ const inputFieldArray = [
     placeholder: "Mật khẩu",
     className: "form-field",
     prefix: <LockOutlined />,
-    rules: [
-      {
-        required: true,
-        message: "Trường này không được bỏ trống",
-      },
-    ],
-  },
-  {
-    name: "confirmPassword",
-    placeholder: "Nhập lại mật khẩu",
-    className: "form-field",
-    prefix: <LockOutlined />,
+    type: "password",
     rules: [
       {
         required: true,
@@ -44,7 +57,36 @@ const inputFieldArray = [
 ];
 
 const SignupContent = () => {
+  const { register, loading } = useAuth();
   const [hover, setHover] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleRegister = async () => {
+    const { name, email, password } = formData;
+    console.log(name, email, password);
+
+    if (!name || !password || !email) {
+      message.error("Vui lòng điền đầy đủ thông tin!");
+      return;
+    }
+
+    try {
+      await register({ name, email, password });
+      message.success("Đăng ký thành công!");
+    } catch (error) {
+      message.error("Có lỗi xảy ra khi đăng ký!");
+    }
+  };
+
   return (
     <>
       <Row style={{ justifyContent: "center" }}>
@@ -78,31 +120,19 @@ const SignupContent = () => {
           </Row>
           <Row style={{ marginTop: 10, fontWeight: 700, fontSize: 14 }}>
             {inputFieldArray.map((field) => (
-              <>
-                {/* <span>{field.title}</span> */}
-                <Row style={{ width: "100%" }}>
-                  <p>{field.placeholder}</p>
-                  <Input
-                    style={{ padding: 13, marginTop: 10, marginBottom: 10 }}
-                    key={field.name}
-                    {...field}
-                  />
-                </Row>
-              </>
+              <Row style={{ width: "100%" }} key={field.name}>
+                <p>{field.placeholder}</p>
+                <Input
+                  style={{ padding: 13, marginTop: 10, marginBottom: 10 }}
+                  name={field.name}
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  prefix={field.prefix}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                />
+              </Row>
             ))}
-            {/* <span>Tài khoản:</span>
-
-            <Input
-              placeholder="Tên đăng nhập"
-              prefix={<UserOutlined />}
-              style={{ padding: 13, marginTop: 10, marginBottom: 10 }}
-            />
-            <span>Mật khẩu:</span>
-            <Input.Password
-              placeholder="Mật khẩu"
-              style={{ padding: 13, marginTop: 10 }}
-              prefix={<LockOutlined />}
-            /> */}
           </Row>
           <Row style={{ marginTop: 10 }}>
             <Checkbox>Lưu đăng nhập</Checkbox>
@@ -123,8 +153,8 @@ const SignupContent = () => {
             <Button
               style={{
                 backgroundColor: hover ? "#f95e5e" : "#FE0000",
-                border: hover ? "none" : "none",
-                transition: hover ? "background-color 0.1s ease" : "none",
+                border: "none",
+                transition: "background-color 0.1s ease",
                 color: "#fff",
                 fontWeight: 700,
                 width: "100%",
@@ -133,6 +163,8 @@ const SignupContent = () => {
               }}
               onMouseOver={() => setHover(true)}
               onMouseOut={() => setHover(false)}
+              loading={loading}
+              onClick={handleRegister}
             >
               Đăng ký
             </Button>
