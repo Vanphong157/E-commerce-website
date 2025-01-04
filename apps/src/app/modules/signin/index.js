@@ -1,8 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Button, Col, Input, Row, Typography, Avatar, Checkbox, message } from "antd";
+import {
+  Button,
+  Col,
+  Input,
+  Row,
+  Typography,
+  Avatar,
+  Checkbox,
+  message,
+} from "antd";
 import { useAuth } from "../../contexts/AuthContext"; // Import useAuth để sử dụng hàm login
+import { useRouter } from "next/navigation";
 
 const { Title } = Typography;
 
@@ -14,15 +24,21 @@ const inputFieldArray = [
   },
   {
     name: "password",
+    type: "password",
     placeholder: "Mật khẩu",
     prefix: <LockOutlined />,
   },
 ];
 
 const SigninContent = () => {
-  const { login, loading } = useAuth(); // Lấy login và trạng thái loading từ AuthContext
+  const { login, loading } = useAuth();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [hover, setHover] = useState(false);
+  const router = useRouter();
+  const isAuthed = localStorage.getItem("token");
+  if (isAuthed) {
+    router.push("/");
+  }
 
   // Hàm xử lý thay đổi input
   const handleInputChange = (e) => {

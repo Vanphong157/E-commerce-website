@@ -3,9 +3,11 @@ import { Col, Row, Typography } from "antd";
 import React, { useState } from "react";
 import InformationComponent from "./informationComponent";
 import OrderHistory from "./order-history";
+import { useRouter } from "next/navigation";
 
 const PersonalPage = () => {
   const [template, setTemplate] = useState(1);
+  const router = useRouter();
 
   const handleChooseTemplate = (num) => {
     return setTemplate(num);
@@ -18,6 +20,11 @@ const PersonalPage = () => {
 
   const handleMouseLeave = () => {
     setHoveredTemplate(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push("/");
   };
 
   const getRowStyle = (templateId) => {
@@ -49,6 +56,14 @@ const PersonalPage = () => {
             onClick={() => handleChooseTemplate(2)}
           >
             <Typography>Xem đơn hàng</Typography>
+          </Row>
+          <Row
+            style={getRowStyle(3)}
+            onMouseEnter={() => handleMouseEnter(3)}
+            onMouseLeave={handleMouseLeave}
+            onClick={() => handleLogout()}
+          >
+            <Typography>Đăng xuất</Typography>
           </Row>
         </Col>
         <Col
