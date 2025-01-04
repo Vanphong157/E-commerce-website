@@ -36,19 +36,19 @@ const CartComponent = () => {
   }, []);
 
   // Handle quantity increase
-  const handleIncreaseQuantity = async (itemId, currentQuantity) => {
-    await updateCartItemQuantity(itemId, currentQuantity + 1);
+  const handleIncreaseQuantity = async (productId, currentQuantity) => {
+    await updateCartItemQuantity(productId, currentQuantity + 1);
   };
 
   // Handle quantity decrease
-  const handleDecreaseQuantity = async (itemId, currentQuantity) => {
+  const handleDecreaseQuantity = async (productId, currentQuantity) => {
     if (currentQuantity > 1) {
-      await updateCartItemQuantity(itemId, currentQuantity - 1);
+      await updateCartItemQuantity(productId, currentQuantity - 1);
     }
   };
 
   // Update cart item quantity in backend and update state
-  const updateCartItemQuantity = async (itemId, newQuantity) => {
+  const updateCartItemQuantity = async (productId, newQuantity) => {
     try {
       const response = await fetch(`https://api-doan-9c1f18bfacff.herokuapp.com/cart/update`, {
         method: "POST",
@@ -56,9 +56,12 @@ const CartComponent = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ quantity: newQuantity, itemId }),
+        body: JSON.stringify({ quantity: newQuantity, productId }),
       });
-      console.log({ quantity: newQuantity, itemId });
+
+      console.log({ quantity: newQuantity, productId });
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Cập nhật số lượng thất bại");
@@ -74,21 +77,30 @@ const CartComponent = () => {
   };
 
   // Handle product removal
-  const handleRemoveProduct = async (itemId) => {
+  const handleRemoveProduct = async (productId) => {
     try {
-      const response = await fetch(`https://api-doan-9c1f18bfacff.herokuapp.com/cart/item/${itemId}`, {
-        method: "DELETE",
+      const payload = { "productId": productId,
+        "abcid": "123"
+       };
+
+       const response = await fetch(`https://api-doan-9c1f18bfacff.herokuapp.com/cart/remove`, {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({  productId }),
       });
+
+      console.log(JSON.stringify({  productId }));
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Xóa sản phẩm thất bại");
       }
 
-      const updatedData = await response.json();
-      setCart(updatedData.cart);
+      fetchUserCart();
       message.success("Xóa sản phẩm thành công");
     } catch (error) {
       console.error(error);
@@ -376,7 +388,7 @@ const CartComponent = () => {
                     <Button
                       type="default"
                       icon={<PlusOutlined style={styles.buttonIcon} />}
-                      onClick={() => handleIncreaseQuantity(item._id, item.quantity)}
+                      onClick={() => handleIncreaseQuantity(product._id, item.quantity)}
                       style={{ borderRadius: '4px' }}
                       aria-label="Tăng số lượng"
                     />
@@ -384,7 +396,7 @@ const CartComponent = () => {
                   <Button
                     type="primary"
                     danger
-                    onClick={() => handleRemoveProduct(item._id)}
+                    onClick={() => handleRemoveProduct(product._id)}
                     style={styles.removeButton}
                     className="custom-remove-button"
                     aria-label="Xóa sản phẩm"
