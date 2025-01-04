@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  } , []);
+  }, []);
 
   const login = async ({ email, password }) => {
     try {
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       setToken(data.token);
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.user.role);
+
       data.user.role === "admin"
         ? router.push("/pages/admin")
         : router.push("/");
